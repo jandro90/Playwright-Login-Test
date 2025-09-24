@@ -1,0 +1,22 @@
+{
+  "name": "playwright-login-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jandro90/Playwright-Login-Test.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jandro90/Playwright-Login-Test/issues"
+  },
+  "homepage": "https://github.com/jandro90/Playwright-Login-Test#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.55.1",
+    "@types/node": "^24.5.2"
+  }
+}
