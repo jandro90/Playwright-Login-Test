@@ -3,7 +3,21 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test": "npx playwright test",
+
+    "test:dev": "npx playwright test --config=configs/dev.config.ts",
+    "test:pre": "npx playwright test --config=configs/pre.config.ts",
+    "test:prod": "npx playwright test --config=configs/prod.config.ts",
+
+    "test:dev:ios": "npx playwright test --config=configs/dev.config.ts --project=IOS",
+    "test:dev:android": "npx playwright test --config=configs/dev.config.ts --project=ANDROID",
+    "test:dev:chrome": "npx playwright test --config=configs/dev.config.ts --project=Chrome",
+    "test:dev:firefox": "npx playwright test --config=configs/dev.config.ts --project=Firefox",
+    "test:dev:webkit": "npx playwright test --config=configs/dev.config.ts --project=Webkit",
+
+    "report": "npx playwright show-report"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jandro90/Playwright-Login-Test.git"
