@@ -8,9 +8,10 @@ export default defineConfig({
   ...baseConfig,
   testDir: '../tests',
   outputDir: '../test-results',
+  workers: 1,
   use: {
     baseURL,
-    // in case the test fail is attached automatically video, screenshot and trace for evidence in the report
+    headless: false,
     screenshot: 'only-on-failure',
     trace: 'retain-on-failure',
     video: 'retain-on-failure',
@@ -18,27 +19,27 @@ export default defineConfig({
 
   projects: [
 /*     DESKTOP PROJECTS */
-    {
+  {
       name: 'Chrome',
       use: { ...devices['Desktop Chrome'] },
-    },
-    {
-      name: 'Firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
+  },
+  {
+     name: 'Firefox',
+     use: { ...devices['Desktop Firefox'] },
+   },
 
-    {
-      name: 'Webkit',
-      use: { ...devices['Desktop Safari'] },
-    },
+   {
+     name: 'Webkit',
+     use: { ...devices['Desktop Safari'] },
+   },
    /*  MOBILE PROJECTS */
-    {
-      name: 'IOS',
-      use: { ...devices['iPhone 12 Pro'] },
-    },
-    {
-      name: 'ANDROID',
-      use: { ...devices['Galaxy S24'] },
-    },
+   {
+     name: 'IOS',
+     use: { ...devices['iPhone 12 Pro'] },
+   },
+   {
+     name: 'ANDROID',
+     use: { ...devices['Galaxy S24'] },
+   },
   ],
 });
