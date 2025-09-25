@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "npx playwright test",
+    "test": "npm run test:dev",
 
     "test:dev": "npx playwright test --config=configs/dev.config.ts",
     "test:pre": "npx playwright test --config=configs/pre.config.ts",
