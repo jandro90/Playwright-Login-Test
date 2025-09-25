@@ -1,6 +1,7 @@
-import { Page, Locator } from "@playwright/test";
+import { Page, Locator, Response } from "@playwright/test";
 
 export class LoginPage {
+  readonly page: Page;
   readonly loginComponent: Locator;
   readonly closeButton: Locator;
   readonly loginButton: Locator;
@@ -15,6 +16,7 @@ export class LoginPage {
 
 
   constructor(page: Page) {
+    this.page = page;
     this.loginComponent = page.locator('codere-new-login');
     // Buttons
     this.loginButton = this.loginComponent.locator('#btnaccess')
@@ -24,10 +26,28 @@ export class LoginPage {
     this.eyeOffButton = this.loginComponent.locator('ion-icon[name="eye-off"]');
     this.closeButton = this.loginComponent.locator('button.closeModal');
     // Inputs
-    this.userField = this.loginComponent.locator('[formControlName="email"]');
-    this.passwordField = this.loginComponent.locator('[formControlName="password"]');
+    this.userField = this.loginComponent.getByRole('textbox', { name: 'Usuario / Correo electrónico' });
+    this.passwordField = this.loginComponent.locator('label').filter({ hasText: 'Contraseña' });
     // Modals
     this.alertFillFields = page.getByRole('alertdialog', { name: 'Login' }).locator('ion-backdrop');
     this.alertInvalidLogin = page.getByRole('alertdialog', { name: 'Error de inicio de sesión' }).locator('ion-backdrop')
+  }
+
+  async openLoginModal() {
+  // navigate to baseUrl
+  const response = await this.page.goto('/');
+  if (!response?.ok()) {
+    throw new Error(`Impossible to load the page. Status: ${response?.status()}`);
+  }
+
+  // Accept Cookies. (if is visible)
+  const acceptCookiesButton = this.page.getByRole('button', { name: 'Aceptar', exact: true });
+  if (await acceptCookiesButton.isVisible()) {
+    await acceptCookiesButton.click();
+  }
+
+  // Finally Open Login Modal
+  const accessButton = this.page.getByRole('button', { name: 'Acceder', exact: true });
+  await accessButton.click();
   }
 }
