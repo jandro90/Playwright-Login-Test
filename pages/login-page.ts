@@ -26,8 +26,8 @@ export class LoginPage {
     this.eyeOffButton = this.loginComponent.locator('ion-icon[name="eye-off"]');
     this.closeButton = this.loginComponent.locator('button.closeModal');
     // Inputs
-    this.userField = this.loginComponent.getByRole('textbox', { name: 'Usuario / Correo electrónico' });
-    this.passwordField = this.loginComponent.locator('label').filter({ hasText: 'Contraseña' });
+    this.userField = this.loginComponent.locator('ion-input[formcontrolname="username"] input');
+    this.passwordField = this.loginComponent.locator('ion-input[formcontrolname="password"] input');
     // Modals
     this.alertFillFields = page.getByRole('alertdialog', { name: 'Login' }).locator('ion-backdrop');
     this.alertInvalidLogin = page.getByRole('alertdialog', { name: 'Error de inicio de sesión' }).locator('ion-backdrop')
