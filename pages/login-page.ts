@@ -21,19 +21,19 @@ export class LoginPage {
     // Buttons
     this.loginButton = this.loginComponent.locator('#btnaccess')
     this.registerButton = this.loginComponent.getByRole('button', { name: 'Regístrate', exact: true });
-    this.forgetPassword = this.loginComponent.getByRole('button', { name: '¿Olvidaste tu contraseña?', exact: true });
     this.eyeOnButton = this.loginComponent.locator('ion-icon[name="eye"]');
     this.eyeOffButton = this.loginComponent.locator('ion-icon[name="eye-off"]');
     this.closeButton = this.loginComponent.locator('button.closeModal');
+    this.forgetPassword = page.getByRole('button', { name: '¿Olvidó su contraseña?' })
     // Inputs
     this.userField = this.loginComponent.locator('ion-input[formcontrolname="username"] input');
     this.passwordField = this.loginComponent.locator('ion-input[formcontrolname="password"] input');
     // Modals
     this.alertFillFields = page.getByRole('alertdialog', { name: 'Login' }).locator('ion-backdrop');
-    this.alertInvalidLogin = page.getByRole('alertdialog', { name: 'Error de inicio de sesión' }).locator('ion-backdrop')
+    this.alertInvalidLogin = page.getByRole('alertdialog', { name: 'Error de inicio de sesión' }).locator('ion-backdrop');
   }
 
-  async openLoginModal() {
+  async openLoginModal(): Promise<void> {
   // navigate to baseUrl
   const response = await this.page.goto('/');
   if (!response?.ok()) {

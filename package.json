@@ -16,7 +16,10 @@
     "test:dev:firefox": "npx playwright test --config=configs/dev.config.ts --project=Firefox",
     "test:dev:webkit": "npx playwright test --config=configs/dev.config.ts --project=Webkit",
 
-    "report": "npx playwright show-report"
+    "report": "npx playwright show-report",
+
+    "test:regression": "npm run test --grep @regression",
+    "test:smoke": "npm run test --grep @smoke"
   },
   "repository": {
     "type": "git",
