@@ -1,20 +1,14 @@
 import { test, expect, Page } from "@playwright/test";
 import { LoginPage } from "../../pages/login-page";
 
-test.describe.configure({ mode: "serial" });
-
 test.describe("@Regression - Login Page", () => {
   let loginPage: LoginPage;
-  let browser: Page;
+  let currentPage: Page;
 
   test.beforeEach(async ({ page }) => {
     loginPage = new LoginPage(page);
-    browser = page
+    currentPage = page
     await loginPage.openLoginModal();
-  });
-
-  test.afterAll(async () => {
-    await browser.close();
   });
 
   test('Core UI Elements are visible', async () => {
@@ -42,7 +36,7 @@ test.describe("@Regression - Login Page", () => {
     })
     
     await test.step('When user Click to "ACCESS" login modal is open', async () => {
-      const accessButton = browser.getByRole('button', { name: 'Acceder', exact: true }); 
+      const accessButton = currentPage.getByRole('button', { name: 'Acceder', exact: true }); 
       await accessButton.click();
       await expect(loginPage.loginComponent).toBeVisible();
     });
@@ -81,37 +75,57 @@ test.describe("@Regression - Login Page", () => {
     });
     await test.step('Register button should redirect to "/RegistroNewPage"', async () => {
         await loginPage.registerButton.click();
-        await expect(browser).toHaveURL(/RegistroNewPage/)
+        await expect(currentPage).toHaveURL(/RegistroNewPage/)
     })
   });
 
-  test('Should show error modal when trying to login without filling (username & password)', async () => {
-    await loginPage.loginButton.click();
-    await expect(loginPage.alertFillFields).toBeVisible();
+  test('Should alert modal when trying to login without filling (username & password)', async () => {
+    await test.step('Press in Access button', async () => {
+        await loginPage.loginButton.click();
+    })
+    await test.step('Alert modal should be visible', async () => {
+        await expect(loginPage.alertFillFields).toBeVisible();
+    })
+    
   });
 
   test('Should show error modal when trying to login without filling username but password is filled', async () => {
-    await loginPage.passwordField.fill('1234Abcd');
-    await loginPage.loginButton.click();
-    await expect(loginPage.alertFillFields).toBeVisible();
+    await test.step('Fill password field', async () => {
+        await loginPage.passwordField.fill('1234Abcd');
+    });
+    await test.step('Press Access button', async () => {
+        await loginPage.loginButton.click();
+    });
+    await test.step('Alert modal should be visible', async () => {
+        await expect(loginPage.alertFillFields).toBeVisible();
+    })
   });
   
   test('Should show error modal when trying to login without filling password but username is filled', async () => {
-    await loginPage.userField.fill('User123');
-    await loginPage.loginButton.click();
-    await expect(loginPage.alertFillFields).toBeVisible();
+    await test.step('Fill User field', async () => {
+        await loginPage.userField.fill('User123');
+    });
+    await test.step('Press Access button', async () => {
+        await loginPage.loginButton.click();
+    });
+    await test.step('Alert modal should be visible', async () => {
+        await expect(loginPage.alertFillFields).toBeVisible();
+    })
   });
 
   test('Access Button is working properly', async () => {
     await test.step('Access Button is visible', async () => {
       await expect(loginPage.loginButton).toBeVisible();
     });
-    await test.step('Access button should call to "/login" to validate', async () => {
-        await loginPage.userField.fill('user123');
-        await loginPage.passwordField.fill('1234')
-        await loginPage.loginButton.click();
-
-        const loginRequest = await browser.waitForResponse((res) => {
+    await test.step('Fill Username & Password', async () => {
+      await loginPage.userField.fill('user123');
+      await loginPage.passwordField.fill('1234')
+    });
+    await test.step('Press Access  button', async () => {
+      await loginPage.loginButton.click();
+    })
+    await test.step('(POST: /login) should be called to validate', async () => {
+        const loginRequest = await currentPage.waitForResponse((res) => {
           return res.url().includes("/login") && res.request().method() === "POST";
         });
         await expect(loginRequest).toBeTruthy();
@@ -119,20 +133,22 @@ test.describe("@Regression - Login Page", () => {
   });
 
   test('Error alert should be displayed when user try login with invalid data ', async () => {
-    await test.step('Invalid credentials alert should be displayed', async () => {
+    await test.step('Fill invalid username & password', async () => {
       await loginPage.userField.fill('User123');
       await loginPage.passwordField.fill('abcd1234');
+    });
+    await test.step('Click on Access button', async () => {
       await loginPage.loginButton.click();
+    });
+    await test.step('Invalid credentials alert should be displayed', async () => {
       await expect(loginPage.alertInvalidLogin).toBeVisible();
     });
-
     await test.step('Invalid credentials alert should contains forgot password link', async () => {
       await expect(loginPage.forgetPassword).toBeVisible();
-    })
-
+    });
     await test.step('When user click in forgot password Remember pass process should be init ', async () => {
       // This is working, but a new class called RememberPasswordPage should be created because it represents a separate component/flow, in order to maintain the Page Object Model architecture properly.
-      const rememberPassModal = await browser.locator('codere-new-login');
+      const rememberPassModal = await currentPage.locator('codere-new-login');
       await expect(rememberPassModal).toBeVisible();
     })
   })
